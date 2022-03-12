@@ -41,7 +41,7 @@ function mdot(M)
     # M_kg = M*c^2
     # L_edd = 3e4*L_☼*(M_kg/M_☼)
 
-    L_edd = 3e4*L_☼*(M/M_☼)
+    L_edd = 3.2e4*L_☼*(M/M_☼)
     Mdot = -L_edd/(c^2*η)
     mdot = -0.1*Mdot
 end

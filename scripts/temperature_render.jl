@@ -4,9 +4,14 @@ using CarterBoyerLindquist
 using AccretionFormulae
 using StaticArrays
 using Printf
+using LaTeXStrings
 
 using Plots
 gr()
+
+function mass_scale_fraction(M, η, edd_ratio, r_isco, r_g, r)
+    mass_scale_fraction = ((M * η)^(-1) * (edd_ratio * (1-√(r_isco/r))) * (r_g/r)^3)^(1/4)
+end
 
 function temperature(m, sol, max_time; kwargs...)
     g =  AccretionFormulae.redshift(m, sol, max_time; kwargs...)
@@ -79,8 +84,8 @@ function temperature_render(;mass=1, spin=0.998, obs_angle=85.0, disc_angle=90.0
     r_isco_phys = AccretionFormulae.r_isco(M_phys, 0.998)
     r_g_phys = M_phys
 
-    numerators =   AccretionFormulae.mass_scale_fraction.(M_phys, η_phys, edd_ratio_phys, r_isco_phys, r_g_phys, radius_img*M_phys)
-    denominators = AccretionFormulae.mass_scale_fraction.(M, η, edd_ratio, R_isco, M, radius_img)
+    numerators = mass_scale_fraction.(M_phys, η_phys, edd_ratio_phys, r_isco_phys, r_g_phys, radius_img*M_phys)
+    denominators = mass_scale_fraction.(M, η, edd_ratio, R_isco, M, radius_img)
 
     fractions = numerators./denominators
     temperature_img .*= fractions
@@ -91,16 +96,16 @@ function temperature_render(;mass=1, spin=0.998, obs_angle=85.0, disc_angle=90.0
     # scale = 10^scale
     
     # scaling image
-    scale = 1e7
+    scale = 1e6
     scalestr = @sprintf "%.E" scale
     new_img = reverse(temperature_img, dims=1)
     new_img ./= scale
 
     heatmap(new_img, aspect_ratio=1.0, size=(resolution*3/2, resolution), 
-    clim=(0,3)
+    clim=(0,10)
     )
     # contour(new_img, aspect_ratio=1.0, size=(resolution*3/2, resolution), clim=(0,3))
     title!("Temperature Scale = $scalestr, Mass = $mass M_☼")
 end
 
-temperature_render(obs_angle=85.0, mass=1)
+temperature_render(obs_angle=85.0, mass=100)
