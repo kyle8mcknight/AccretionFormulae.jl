@@ -5,9 +5,15 @@ with spin a_star, and mass M.
 """
 function r_isco(a_star, M)
     a = a_star
+<<<<<<< HEAD
+    r_g = M 
+    z1 = 1+∛(1-a^2)*(∛(1+a)+∛(1-a))
+    z2 = √(3*a^2+z1^2)
+=======
     r_g = M
     z1 = 1 + ∛(1 - a^2) * (∛(1 + a) + ∛(1 - a))
     z2 = √(3 * a^2 + z1^2)
+>>>>>>> 9dfda8835958162ae46e0e575201462dd749fd60
     if a >= 0
         r_isco = (3 + z2 - √((3 - z1) * (3 + z1 + 2 * z2))) * r_g
     elseif a < 0
@@ -49,6 +55,15 @@ function mdot(M)
     # M_kg = M*c^2
     # L_edd = 3e4*L_☼*(M_kg/M_☼)
 
+<<<<<<< HEAD
+    L_edd = 3.2e4*L_☼*(M/M_☼)
+    Mdot = -L_edd/(c^2*η)
+    mdot = -0.1*Mdot
+end
+
+function diss(mdot, r, a_star, M)
+    diss = ((c^6)/(G^2))*mdot*flux(r, a_star, M)/(4*π*r)
+=======
     L_edd = 3e4 * L_☼ * (M / M_☼)
     Mdot = -L_edd / (c^2 * η)
     mdot = -0.1 * Mdot
@@ -56,6 +71,7 @@ end
 
 function diss(mdot, r, a_star, M)
     diss = ((c^6) / (G^2)) * mdot * flux(r, a_star, M) / (4 * π * r)
+>>>>>>> 9dfda8835958162ae46e0e575201462dd749fd60
 end
 
 function temperature(r, a_star, M)
@@ -74,6 +90,10 @@ end
 function mass_scale_fraction(M, η, edd_ratio, r_isco, r_g, r)
     mass_scale_fraction =
         ((M * η)^(-1) * (edd_ratio * (1 - √(r_isco / r))) * (r_g / r)^3)^(1 / 4)
+end
+
+function mass_scale_fraction(M, η, edd_ratio, r_isco, r_g, r)
+    mass_scale_fraction = ((M * η)^(-1) * (edd_ratio * (1-√(r_isco/r))) * (r_g/r)^3)^(1/4)
 end
 
 # constants
